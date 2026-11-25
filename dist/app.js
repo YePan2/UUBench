@@ -68,7 +68,7 @@ function header() {
   </div></header>`;
 }
 function footer() {
-  return `<footer class="site-footer"><div><a class="footer-brand" href="#leaderboard">UUBench<span>.</span></a><p>${t('Beyond what is said. Toward what is meant.','从说出的话，走向未说出的意图。')}</p></div><div class="footer-right"><span class="status-dot live"></span>${t('JEV 1.14.0 · 216 paired inputs','JEV 1.14.0 · 216 条成对输入')}<a href="#methodology">${t('Paper and figures','论文与配图')} ${icon('external',14)}</a></div></footer>`;
+  return `<footer class="site-footer"><div><a class="footer-brand" href="#leaderboard">UUBench<span>.</span></a><p>${t('Beyond what is said. Toward what is meant.','从说出的话，走向未说出的意图。')}</p></div></footer>`;
 }
 function hero() {
   return `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="tiny-line"></span>${t('THE DIGITAL HUMAN BENCHMARK','数字人隐式意图回应评测')}</div>
@@ -120,8 +120,7 @@ function leaderboard() {
   <div class="leaderboard-panel"><div class="metric-tabs" role="tablist" aria-label="${t('Metric view','指标视图')}">${[['overview','Overview','概览'],['quality','Response quality · Q','回应质量 · Q'],['evidence','Intent evidence · S','意图证据 · S']].map(([v,en,zh])=>`<button role="tab" aria-selected="${state.metric===v}" class="${state.metric===v?'active':''}" data-metric="${v}">${t(en,zh)}</button>`).join('')}<button class="metric-help" data-action="metrics" aria-label="${t('About these metrics','指标说明')}">${icon('info',17)}</button></div>
     <div class="table-toolbar"><div class="filter-group" aria-label="${t('Filter systems','筛选系统')}">${[['all','All systems','全部',9],['closed','Closed','闭源',5],['open','Open','开源',4]].map(([v,en,zh,n])=>`<button data-filter="${v}" aria-pressed="${state.filter===v}" class="${state.filter===v?'active':''}">${t(en,zh)}<span>${n}</span></button>`).join('')}</div><div class="table-controls"><label class="search-box">${icon('search',16)}<input id="model-search" type="search" value="${esc(state.search)}" placeholder="${t('Find a system…','搜索系统…')}" aria-label="${t('Find a system','搜索系统')}"></label></div></div>
     <div id="table-container" role="tabpanel">${table()}</div>
-    <div class="table-footer"><span id="row-count">${tableCount()}</span><span><a href="#cases">${t('Watch real response examples','观看真实回应案例')}</a></span></div>
-  </div><div class="table-notes"><span>${t('Q and S: n = 216 on every system','Q 与 S：每个系统 n = 216')}</span><span>${t('Primitive n: A1–A4, V1–V4 = 209, 203, 214, 20, 95, 214, 132, 132','原语有效数：A1–A4、V1–V4 = 209、203、214、20、95、214、132、132')}</span><span>${t('Sorted by the summary score, not by name','按汇总分排序，不按名称')}</span></div>
+  </div>
   </section>
   <section class="bottom-feature"><div class="feature-symbol">${icon('compare',35)}</div><div><div class="eyebrow">${t('BEYOND THE NUMBERS','在分数之外')}</div><h3>${t('Three moments. Three ways to respond.','三个语境，三种回应。')}</h3><p>${t('Watch real user clips and responses from Emma, Tavus, and Vidu. Explore what was said—and what was meant.','观看真人输入与 Emma、Tavus、Vidu 的实际回应，了解字面表达与言外之意。')}</p></div><a href="#cases" class="button button-outline">${t('Explore the cases','查看案例')} ${icon('arrow',17)}</a></section>`;
 }
@@ -130,7 +129,6 @@ function filtered() {
   return systems.filter(s => (state.filter==='all'||s.type===state.filter) && `${s.name} ${s.variant}`.toLowerCase().includes(state.search.toLowerCase()))
     .sort((a, b) => sortValue(b) - sortValue(a) || a.name.localeCompare(b.name));
 }
-function tableCount() {return t(`Showing ${filtered().length} of 9 systems`, `显示 ${filtered().length} / 9 个系统`);}
 function cellValue(s, id) {
   const r = result(s);
   if (id === 'S') return r.S;
@@ -217,7 +215,7 @@ function render() {
   $('#app').innerHTML=`${header()}<main id="main" class="page-container">${state.view==='leaderboard'?leaderboard():state.view==='cases'?caseStudies():methodology()}</main>${footer()}`;
   bind();
 }
-function renderTable() {$('#table-container').innerHTML=table();$('#row-count').textContent=tableCount();}
+function renderTable() {$('#table-container').innerHTML=table();}
 function notify(message) {clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').classList.add('visible');toastTimer=setTimeout(()=>$('#toast').classList.remove('visible'),4200);}
 function showDialog(title, body) {
   const d=$('#detail-dialog');
