@@ -24,7 +24,11 @@ export const cases = [
         "analysis": [
           "Emma answers the literal question about banned substances, without engaging with the speaker’s point that the rules are easy to circumvent or their invitation to agree.",
           "Emma 从字面上回答了禁用药物的问题，没有回应说话者关于规则容易被规避的观点，也没有接住其寻求认同的意图。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.4055555555555557,
+          "S": -0.30025990177773126
+        }
       },
       {
         "name": "Tavus",
@@ -34,7 +38,11 @@ export const cases = [
         "analysis": [
           "Tavus treats the rhetorical question as a request for information and asks it back. The underlying argument about circumventing the rules remains unaddressed.",
           "Tavus 将反问当作信息询问，又将问题抛回；关于规则容易被规避的隐含观点没有得到回应。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.6566666666666667,
+          "S": -0.5327286111791252
+        }
       },
       {
         "name": "Vidu",
@@ -44,7 +52,11 @@ export const cases = [
         "analysis": [
           "Vidu acknowledges people trying to get around the rules and expresses agreement. Its follow-up shifts toward what they are hiding, rather than developing the point about weaknesses in the rules.",
           "Vidu 认可了有人试图绕过规则这一观点，表达出认同；后续问题转向他们试图隐瞒什么，没有进一步回应规则本身的漏洞。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.8077777777777777,
+          "S": -0.37467116986827614
+        }
       }
     ]
   },
@@ -73,7 +85,11 @@ export const cases = [
         "analysis": [
           "Emma reacts to the forceful opening and asks for context. The reply does not directly engage with the criticism of people who refuse to accept defeat.",
           "Emma 对强烈的开场措辞作出反应，并询问背景，没有直接回应对输不起者的讽刺。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.96,
+          "S": -0.04348158547946366
+        }
       },
       {
         "name": "Tavus",
@@ -83,7 +99,11 @@ export const cases = [
         "analysis": [
           "Tavus recognizes the blunt delivery, but comments on how the speaker talks rather than engaging with the target of the criticism.",
           "Tavus 注意到表达直白强烈，但主要评论说话方式，没有回应讽刺所指向的对象。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.7266666666666666,
+          "S": 0.30909459826332836
+        }
       },
       {
         "name": "Vidu",
@@ -93,7 +113,11 @@ export const cases = [
         "analysis": [
           "Vidu connects the remark to respect and grace in politics. This acknowledges the broader theme, while softening the specific sarcastic criticism into a general reflection.",
           "Vidu 将这句话联系到政治中的尊重与风度，回应了大致主题，但将针对性的讽刺弱化成了一般性的感想。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.478888888888889,
+          "S": -0.3665131390975336
+        }
       }
     ]
   },
@@ -122,7 +146,11 @@ export const cases = [
         "analysis": [
           "Emma asks for background and the identities of the three friends. It does not explicitly acknowledge the accusation carried by the ironic thank-you.",
           "Emma 询问事情背景和三位朋友的身份，没有明确回应反讽式道谢中包含的指控。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.6177777777777778,
+          "S": -0.44833315812096175
+        }
       },
       {
         "name": "Tavus",
@@ -132,7 +160,11 @@ export const cases = [
         "analysis": [
           "Tavus acknowledges the speaker’s distress and frustration. The reply offers emotional validation, but does not specifically address the accusation or the ironic meaning of “thank you.”",
           "Tavus 识别了说话者的不满和挫败感，给予情绪上的认可，但没有具体回应指控或“谢谢”的反讽含义。"
-        ]
+        ],
+        "scores": {
+          "Q": 2.135555555555556,
+          "S": -0.30189762578901497
+        }
       },
       {
         "name": "Vidu",
@@ -142,7 +174,11 @@ export const cases = [
         "analysis": [
           "Vidu notices the emotional intensity and acknowledges that the speaker is worked up. Its broad response leaves the accusation behind the apparent gratitude implicit.",
           "Vidu 注意到强烈的情绪，并回应说话者的激动状态；这一概括性的回应没有点明表面道谢背后的指控。"
-        ]
+        ],
+        "scores": {
+          "Q": 1.1877777777777778,
+          "S": 0.04064783024000583
+        }
       }
     ]
   }

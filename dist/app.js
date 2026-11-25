@@ -1,6 +1,6 @@
 import { systems, qualityMetrics, evidenceMetrics, evidenceN, sampleN } from './data.js?v=20261125';
 
-import { cases } from './cases.js?v=20261125-trim39';
+import { cases } from './cases.js?v=20261125-case-scores';
 const route = () => location.hash === '#arena' ? 'cases' : ['cases', 'methodology'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'leaderboard';
 
 const state = {
@@ -163,8 +163,8 @@ function caseStudies() {
   return `<section class="inner-heading cases-heading"><div class="eyebrow">02 / ${t('REAL CONVERSATIONS','真实对话案例')}</div><h1>${t('What is said.<br><em>What is meant.</em>','说出的话，<br><em>未说出的意图。</em>')}</h1><p>${t('Three user clips. Responses from Emma, Tavus, and Vidu. Watch how each system responds to the intent beneath the words.','三个真人片段，Emma、Tavus 和 Vidu 的实际回应。观察不同系统如何回应字面表达背后的意图。')}</p></section>
   <div class="case-studies">${cases.map((c,i)=>`<section class="case-study" id="case-${c.id}" aria-labelledby="title-${c.id}"><header class="case-heading"><span class="case-number">0${i+1}</span><div><div class="eyebrow">${t('CASE STUDY','案例展示')} · ${t('CLIP','片段')} ${Number(c.id)}</div><h2 id="title-${c.id}">${esc(t(...c.title))}</h2></div></header>
     <div class="human-case"><div class="human-media"><h3>${icon('video',17)}${t('Human input','真人输入')}</h3>${caseVideo(c.human,t('Human input','真人输入')+' · '+c.id)}</div><div class="human-context"><div><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(c.human.transcript)}</blockquote></div><div class="unspoken-intent"><h4>${icon('spark',16)}Unspoken intent${t('',' · 隐含意图')}</h4><p>${esc(t(...c.intent))}</p></div></div></div>
-    <div class="case-response-heading"><h3>${t('How the digital humans respond','数字人如何回应')}</h3><span>${t('Same input · Three responses','同一输入 · 三个回应')}</span></div>
-    <div class="case-response-grid">${c.responses.map(r=>`<article class="case-response"><h3>${mark(systems.find(s=>s.name===r.name))}${r.name}</h3>${caseVideo(r,r.name+' · '+t('Clip','片段')+' '+Number(c.id))}<div class="case-response-copy"><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(r.transcript)}</blockquote><div class="case-analysis"><h4>${t('RESPONSE ANALYSIS','回应分析')}</h4><p>${esc(t(...r.analysis))}</p></div></div></article>`).join('')}</div></section>`).join('')}</div>`;
+    <div class="case-response-heading"><h3>${t('How the digital humans respond','数字人如何回应')}</h3><span>${t('Per-clip JEV scores · −3 to +3','单条片段 JEV 分数 · −3 至 +3')}</span></div>
+    <div class="case-response-grid">${c.responses.map(r=>`<article class="case-response"><div class="case-response-top"><h3>${mark(systems.find(s=>s.name===r.name))}${r.name}</h3><div class="case-score-pair" aria-label="${esc(r.name)} ${t('per-clip scores','单条片段分数')}"><span class="case-score-q">Q <strong>${score(r.scores.Q)}</strong></span><span class="case-score-s">S <strong>${score(r.scores.S)}</strong></span></div></div>${caseVideo(r,r.name+' · '+t('Clip','片段')+' '+Number(c.id))}<div class="case-response-copy"><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(r.transcript)}</blockquote><div class="case-analysis"><h4>${t('RESPONSE ANALYSIS','回应分析')}</h4><p>${esc(t(...r.analysis))}</p></div></div></article>`).join('')}</div></section>`).join('')}</div>`;
 }
 function methodology() {
   return `<section class="inner-heading"><div class="eyebrow">03 / ${t('THE BENCHMARK','评测基准')}</div><h1>${t('More than a<br><em>convincing face.</em>','不止于<br><em>逼真的面孔。</em>')}</h1><p>${t('UUBench evaluates whether generated responses meet the needs expressed through words, voice, and visible behavior.','UUBench 评估数字人生成的回应，是否满足由话语、声音和可见行为所表达的需求。')}</p></section>
