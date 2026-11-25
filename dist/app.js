@@ -82,7 +82,11 @@ function hero() {
     <div class="signal-output">${icon('spark',22)}<strong>${t('A meaningful<br>response.','恰如其分<br>的回应。')}</strong><span>VOICE + VISION</span></div>
     <span class="art-caption">${t('FROM MULTIMODAL CUES TO HUMAN CONNECTION','从多模态线索，到有意义的交流')}</span>
   </div></section>
-  <div class="stats-strip"><div><strong>09</strong><span>${t('Systems evaluated','参测系统')}</span></div><div><strong>05 <span>+ 04</span></strong><span>${t('Closed + open-source','闭源 + 开源')}</span></div><div><strong>216</strong><span>${t('Paired inputs per system','每系统成对输入')}</span></div><div><strong>18</strong><span>${t('Core metrics','核心评测指标')}</span></div><div class="stats-note"><span class="status-dot live"></span><div>${t('JEV 1.14.0 means are posted.','已发布 JEV 1.14.0 均值。')}<small>${t('Scale −3 to +3. Higher is better.','量表 −3 至 +3，越高越好。')}</small></div></div></div>`;
+  <section class="score-guide" aria-label="${t('What S and Q measure','S 与 Q 的含义')}">
+    <article class="score-definition score-definition-s"><span class="score-symbol" aria-hidden="true">S</span><div><h2>${t('S · Intent fulfillment','S · 意图满足程度')}</h2><span class="score-perspective">${t('Process-oriented · Evidence perspective','过程导向 · 证据视角')}</span><p>${t('How well does the response address the user’s implicit needs? Scores for applicable auditory and visual cue dimensions are combined using fixed evidence-based weights for each input, then averaged across inputs.','衡量回应对用户隐含需求的满足程度。对适用的听觉与视觉线索维度分别评分，使用每条输入固定的证据权重加权汇总，再对所有输入取平均。')}</p></div></article>
+    <article class="score-definition score-definition-q"><span class="score-symbol" aria-hidden="true">Q</span><div><h2>${t('Q · Response quality','Q · 回应质量')}</h2><span class="score-perspective">${t('Outcome-oriented · Modality perspective','结果导向 · 模态视角')}</span><p>${t('How natural, appropriate, and human-like is the response? Each criterion is rated under audio-only, visual-only, and audiovisual observation. The nine scores are averaged within each response, then across inputs.','衡量回应的自然度、合适度和拟人度。在纯音频、纯视觉和音画联合三种观察条件下分别评分，先对每条回应的九项分数取平均，再对所有输入取平均。')}</p></div></article>
+    <p class="score-guide-note">${t('Both scores range from −3 to +3; higher is better. S and Q are reported separately.','两项分数均为 −3 至 +3，越高越好；S 与 Q 分别报告。')}</p>
+  </section>`;
 }
 function medal(rank, ceremonial) {
   if (rank == null) return `<span class="medal medal-na" aria-hidden="true">—</span>`;
