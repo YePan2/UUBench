@@ -122,7 +122,7 @@ function leaderboard() {
     <div id="table-container" role="tabpanel">${table()}</div>
   </div>
   </section>
-  <section class="bottom-feature"><div class="feature-symbol">${icon('compare',35)}</div><div><div class="eyebrow">${t('BEYOND THE NUMBERS','在分数之外')}</div><h3>${t('Three moments. Three ways to respond.','三个语境，三种回应。')}</h3><p>${t('Watch real user clips and responses from Emma, Tavus, and Vidu. Explore what was said—and what was meant.','观看真人输入与 Emma、Tavus、Vidu 的实际回应，了解字面表达与言外之意。')}</p></div><a href="#cases" class="button button-outline">${t('Explore the cases','查看案例')} ${icon('arrow',17)}</a></section>`;
+  <section class="bottom-feature"><div class="feature-symbol">${icon('compare',35)}</div><div><div class="eyebrow">${t('BEYOND THE NUMBERS','在分数之外')}</div><h3>${t('Sample interactions, beyond the scores.','从评分走进交互样例。')}</h3><p>${t('Browse selected user clips and digital human responses to see what was said—and what was meant.','浏览部分真人输入与数字人回应，观察字面表达与言外之意。')}</p></div><a href="#cases" class="button button-outline">${t('View samples','查看样例')} ${icon('arrow',17)}</a></section>`;
 }
 function sortValue(s) { return state.metric === 'evidence' ? result(s).S : result(s).Qmean; }
 function filtered() {
@@ -158,7 +158,7 @@ function caseVideo(media, label) {
   return `<div class="case-video"><video controls playsinline preload="none" poster="${esc(media.poster)}" aria-label="${esc(label)}"><source src="${esc(media.video)}" type="video/mp4"><a href="${esc(media.video)}">${t('Download video','下载视频')}</a></video></div>`;
 }
 function caseStudies() {
-  return `<section class="inner-heading cases-heading"><div class="eyebrow">02 / ${t('REAL CONVERSATIONS','真实对话案例')}</div><h1>${t('What is said.<br><em>What is meant.</em>','说出的话，<br><em>未说出的意图。</em>')}</h1><p>${t('Three user clips. Responses from Emma, Tavus, and Vidu. Watch how each system responds to the intent beneath the words.','三个真人片段，Emma、Tavus 和 Vidu 的实际回应。观察不同系统如何回应字面表达背后的意图。')}</p></section>
+  return `<section class="inner-heading cases-heading"><div class="eyebrow">02 / ${t('REAL CONVERSATIONS','真实对话案例')}</div><h1>${t('What is said.<br><em>What is meant.</em>','说出的话，<br><em>未说出的意图。</em>')}</h1><p>${t('Selected samples pair user clips with digital human responses. Explore how each response addresses the intent beneath the words.','这里展示部分真人输入与数字人回应样例，观察回应如何照顾字面表达背后的意图。')}</p></section>
   <div class="case-studies">${cases.map((c,i)=>`<section class="case-study" id="case-${c.id}" aria-labelledby="title-${c.id}"><header class="case-heading"><span class="case-number">0${i+1}</span><div><div class="eyebrow">${t('CASE STUDY','案例展示')} · ${t('CLIP','片段')} ${Number(c.id)}</div><h2 id="title-${c.id}">${esc(t(...c.title))}</h2></div></header>
     <div class="human-case"><div class="human-media"><h3>${icon('video',17)}${t('Human input','真人输入')}</h3>${caseVideo(c.human,t('Human input','真人输入')+' · '+c.id)}</div><div class="human-context"><div><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(c.human.transcript)}</blockquote></div><div class="unspoken-intent"><h4>${icon('spark',16)}Unspoken intent${t('',' · 隐含意图')}</h4><p>${esc(t(...c.intent))}</p></div></div></div>
     <div class="case-response-heading"><h3>${t('How the digital humans respond','数字人如何回应')}</h3><span>${t('Same input · Three responses','同一输入 · 三个回应')}</span></div>
