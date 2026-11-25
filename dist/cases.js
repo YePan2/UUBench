@@ -60,7 +60,7 @@ export const cases = [
       "表面在夸民主运转顺畅，实际是在讥讽输不起的人，等的是站边。"
     ],
     "human": {
-      "video": "./media/cases/039/human.mp4",
+      "video": "./media/cases/039/human.mp4?v=trim628",
       "poster": "./media/cases/039/human.jpg",
       "transcript": "Because it's amazing how smoothly our democracy can work when you don't act like a little bitch when you lose."
     },

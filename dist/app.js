@@ -1,6 +1,6 @@
 import { systems, qualityMetrics, evidenceMetrics, evidenceN, sampleN } from './data.js?v=20261125';
 
-import { cases } from './cases.js?v=20261125-cases';
+import { cases } from './cases.js?v=20261125-trim39';
 const route = () => location.hash === '#arena' ? 'cases' : ['cases', 'methodology'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'leaderboard';
 
 const state = {
