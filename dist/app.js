@@ -161,7 +161,6 @@ function caseVideo(media, label) {
 }
 function caseStudies() {
   return `<section class="inner-heading cases-heading"><div class="eyebrow">02 / ${t('REAL CONVERSATIONS','真实对话案例')}</div><h1>${t('What is said.<br><em>What is meant.</em>','说出的话，<br><em>未说出的意图。</em>')}</h1><p>${t('Three user clips. Responses from Emma, Tavus, and Vidu. Watch how each system responds to the intent beneath the words.','三个真人片段，Emma、Tavus 和 Vidu 的实际回应。观察不同系统如何回应字面表达背后的意图。')}</p></section>
-  <nav class="case-jumps" aria-label="${t('Jump to a case','跳转至案例')}">${cases.map((c,i)=>`<button data-case-target="case-${c.id}"><span>0${i+1}</span>${esc(t(...c.title))}${icon('arrow',16)}</button>`).join('')}</nav>
   <div class="case-studies">${cases.map((c,i)=>`<section class="case-study" id="case-${c.id}" aria-labelledby="title-${c.id}"><header class="case-heading"><span class="case-number">0${i+1}</span><div><div class="eyebrow">${t('CASE STUDY','案例展示')} · ${t('CLIP','片段')} ${Number(c.id)}</div><h2 id="title-${c.id}">${esc(t(...c.title))}</h2></div></header>
     <div class="human-case"><div class="human-media"><h3>${icon('video',17)}${t('Human input','真人输入')}</h3>${caseVideo(c.human,t('Human input','真人输入')+' · '+c.id)}</div><div class="human-context"><div><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(c.human.transcript)}</blockquote></div><div class="unspoken-intent"><h4>${icon('spark',16)}Unspoken intent${t('',' · 隐含意图')}</h4><p>${esc(t(...c.intent))}</p></div></div></div>
     <div class="case-response-heading"><h3>${t('How the digital humans respond','数字人如何回应')}</h3><span>${t('Same input · Three responses','同一输入 · 三个回应')}</span></div>
@@ -223,7 +222,6 @@ $('#app').addEventListener('click',e=>{
   if(el.dataset.filter){state.filter=el.dataset.filter;render();return;}
   if(el.dataset.metric){state.metric=el.dataset.metric;render();return;}
   if(el.dataset.model){showModel(el.dataset.model);return;}
-  if(el.dataset.caseTarget){document.getElementById(el.dataset.caseTarget)?.scrollIntoView({behavior:'smooth',block:'start'});return;}
   switch(el.dataset.action){
     case 'language':state.lang=state.lang==='en'?'zh':'en';render();break;
     case 'reset':state.search='';state.filter='all';render();break;
