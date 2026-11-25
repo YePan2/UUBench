@@ -62,19 +62,19 @@ function header() {
   return `<header class="site-header"><div class="nav-inner">
     <a class="brand" href="#leaderboard" aria-label="UUBench home"><img src="./favicon.svg" alt="" width="33" height="33"><span>UUBench<span class="brand-dot">.</span></span></a>
     <nav aria-label="${t('Main navigation','主导航')}">
-      ${[['leaderboard','Leaderboard','排行榜'],['cases','Case studies','案例展示'],['methodology','Benchmark','评测方法']].map(([id,en,zh]) => `<a href="#${id}" ${state.view===id?'aria-current="page"':''}>${t(en,zh)}</a>`).join('')}
+      ${[['leaderboard','Leaderboard','排行榜'],['cases','Case studies','案例展示'],['methodology','Paper','论文']].map(([id,en,zh]) => `<a href="#${id}" ${state.view===id?'aria-current="page"':''}>${t(en,zh)}</a>`).join('')}
     </nav>
-    <div class="nav-actions"><button class="language-button" data-action="language" aria-label="${t('切换到中文','Switch to English')}">${t('EN <span>/ 中文</span>','中文 <span>/ EN</span>')}</button><button class="button button-small button-outline paper-button" data-action="paper">${icon('book',15)} ${t('Paper','论文')} <span class="soon">${t('Soon','待发布')}</span></button></div>
+    <div class="nav-actions"><button class="language-button" data-action="language" aria-label="${t('切换到中文','Switch to English')}">${t('EN <span>/ 中文</span>','中文 <span>/ EN</span>')}</button><a class="button button-small button-outline paper-button" href="https://arxiv.org/abs/2611.30157" target="_blank" rel="noopener noreferrer">${icon('book',15)} ${t('Read paper','阅读论文')} ${icon('external',12)}</a></div>
   </div></header>`;
 }
 function footer() {
-  return `<footer class="site-footer"><div><a class="footer-brand" href="#leaderboard">UUBench<span>.</span></a><p>${t('Beyond what is said. Toward what is meant.','从说出的话，走向未说出的意图。')}</p></div><div class="footer-right"><span class="status-dot live"></span>${t('JEV 1.14.0 · 216 paired inputs','JEV 1.14.0 · 216 条成对输入')}<a href="#methodology">${t('Evaluation protocol','评测协议')} ${icon('external',14)}</a></div></footer>`;
+  return `<footer class="site-footer"><div><a class="footer-brand" href="#leaderboard">UUBench<span>.</span></a><p>${t('Beyond what is said. Toward what is meant.','从说出的话，走向未说出的意图。')}</p></div><div class="footer-right"><span class="status-dot live"></span>${t('JEV 1.14.0 · 216 paired inputs','JEV 1.14.0 · 216 条成对输入')}<a href="#methodology">${t('Paper and figures','论文与配图')} ${icon('external',14)}</a></div></footer>`;
 }
 function hero() {
   return `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="tiny-line"></span>${t('THE DIGITAL HUMAN BENCHMARK','数字人隐式意图回应评测')}</div>
     <h1>${t('Understanding<br>the <em>unspoken.</em>','理解那些<br><em>未说出口的意图。</em>')}</h1>
     <p>${t('Can digital humans read between the lines?<br>Evaluating how they hear, see, and respond to implicit intent.','数字人能否听懂弦外之音？<br>从声音、画面与实际回应，评估对隐式意图的理解。')}</p>
-    <div class="hero-actions"><a class="button button-primary" href="#cases">${icon('compare')} ${t('Explore the cases','查看真实案例')} ${icon('arrow',16)}</a><a class="text-link" href="#methodology">${t('Explore the benchmark','了解评测基准')} ${icon('external',16)}</a></div>
+    <div class="hero-actions"><a class="button button-primary" href="#cases">${icon('compare')} ${t('Explore the cases','查看真实案例')} ${icon('arrow',16)}</a><a class="text-link" href="#methodology">${t('Explore the paper','查看论文与配图')} ${icon('external',16)}</a></div>
   </div><div class="hero-art" aria-label="${t('Audio and visual cues inform implicit intent and a digital human response.','声音和视觉线索共同支持隐式意图与数字人回应。')}">
     <div class="art-grid"></div><div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div>
     <svg class="signal-lines" viewBox="0 0 520 300" aria-hidden="true"><path d="M92 82C180 82 170 147 250 147S340 79 431 79M96 231C175 231 173 151 250 151S346 222 434 222"/><path class="signal-dash" d="M92 82C180 82 170 147 250 147S340 79 431 79M96 231C175 231 173 151 250 151S346 222 434 222"/></svg>
@@ -167,21 +167,53 @@ function caseStudies() {
     <div class="case-response-grid">${c.responses.map(r=>`<article class="case-response"><h3>${mark(systems.find(s=>s.name===r.name))}${r.name}</h3>${caseVideo(r,r.name+' · '+t('Clip','片段')+' '+Number(c.id))}<div class="case-response-copy"><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(r.transcript)}</blockquote><div class="case-analysis"><h4>${t('RESPONSE ANALYSIS','回应分析')}</h4><p>${esc(t(...r.analysis))}</p></div></div></article>`).join('')}</div></section>`).join('')}</div>`;
 }
 function methodology() {
-  return `<section class="inner-heading"><div class="eyebrow">03 / ${t('THE BENCHMARK','评测基准')}</div><h1>${t('More than a<br><em>convincing face.</em>','不止于<br><em>逼真的面孔。</em>')}</h1><p>${t('UUBench evaluates whether generated responses meet the needs expressed through words, voice, and visible behavior.','UUBench 评估数字人生成的回应，是否满足由话语、声音和可见行为所表达的需求。')}</p></section>
-  <div class="method-intro"><span class="method-number">I → R</span><div><h2>${t('Understanding the Unspoken','理解未说出口的意图')}</h2><p>${t('Toward Full-Duplex Multimodal Interaction','面向全双工多模态交互')}</p><p>${t('The evaluation links user-side intent and evidence to the digital human’s actual audiovisual response. It measures response behavior, not hidden reasoning or intent classification accuracy.','评测将用户侧的意图与证据，连接到数字人实际生成的音视频回应；衡量的是回应行为，而非内部推理过程或意图分类准确率。')}</p></div></div>
-  <section class="method-section"><div class="section-heading"><div><div class="eyebrow">${t('THE DATA','数据规模')}</div><h2>${t('A focused evaluation, a broader foundation.','聚焦评测，建立在更广泛的数据之上。')}</h2></div></div><div class="dataset-band"><div><strong>28,548</strong><span>${t('User audiovisual samples','用户音视频样本')}</span><small>TalkVerse · TalkCuts · SpeakVid · TalkVid</small></div><div class="dataset-arrow">${icon('arrow',26)}</div><div><strong>216</strong><span>${t('Stratified evaluation samples','分层抽样评测样本')}</span><small>UUBench-216</small></div><div><strong>9</strong><span>${t('Systems on this board','本榜参测系统')}</span><small>${t('5 closed-source · 4 open-source','5 个闭源 · 4 个开源')}</small></div></div></section>
-  <section class="method-section"><div class="section-heading"><div><div class="eyebrow">${t('THE EVALUATION','评测框架')}</div><h2>${t('Two perspectives. Eighteen metrics.','两个视角，十八项指标。')}</h2></div></div><div class="method-grid"><article class="method-card"><div class="method-card-top"><span class="metric-letter">Q</span><span>01 / ${t('MODALITY PERSPECTIVE','模态视角')}</span></div><h3>${t('How does the response come across?','回应呈现得如何？')}</h3><p>${t('Evaluate naturalness, appropriateness, and human-likeness under three observation conditions: audio, visual, and audiovisual (Omni). The published Q is the mean of those nine scores on each input, then the mean across 216 inputs.','在音频、视觉与音画整体（Omni）三种观察条件下，分别评价自然度、合适度和拟人度。发布的 Q 是每条输入上九项分数的均值，再对 216 条取均值。')}</p><div class="quality-matrix"><span></span><span>${t('Natural','自然度')}</span><span>${t('Appropriate','合适度')}</span><span>${t('Human-like','拟人度')}</span>${['Audio','Visual','Omni'].map((m,i)=>`<strong>${t(m,['音频','视觉','音画'][i])}</strong><span>Q<sub>${i*3+1}</sub></span><span>Q<sub>${i*3+2}</sub></span><span>Q<sub>${i*3+3}</sub></span>`).join('')}</div><div class="method-card-bottom">9 ${t('independent metrics','项独立指标')}<strong>−3 → +3</strong></div></article><article class="method-card"><div class="method-card-top"><span class="metric-letter evidence-letter">S</span><span>02 / ${t('EVIDENCE PERSPECTIVE','证据视角')}</span></div><h3>${t('Does it meet the underlying need?','是否回应了深层需求？')}</h3><p>${t('Score how well the response addresses needs supported by eight cue dimensions. Combine them using frozen, source-side evidence weights. Published primitive means use applicable inputs only.','评价回应对八类线索所支持需求的满足程度，再使用固定的源侧证据权重进行聚合。发布的原语均值只统计适用输入。')}</p><div class="evidence-list">${evidenceMetrics.map(([id,en,zh])=>`<span><b>${id}</b>${t(en,zh)} <small>n=${evidenceN[id]}</small></span>`).join('')}</div><div class="method-card-bottom">8 ${t('dimensions','项维度')} + 1 ${t('weighted score','项加权综合分')}<strong>−3 → +3</strong></div></article></div></section>
-  <section class="method-section principles"><div><div class="eyebrow">${t('READING THE RESULTS','如何解读结果')}</div><h2>${t('Context matters.<br>So does the protocol.','理解结果，<br>也要理解协议。')}</h2></div><div class="principle-list">${[
-    [t('One published pass','一次已发布评分'),t('The board reports JEV 1.14.0 means. It is not an average of separate Ming and Qwen leaderboards.','本榜报告的是 JEV 1.14.0 的均值，不是 Ming 与 Qwen 两套榜的平均。')],
-    [t('An empty value is not zero','空值不是零'),t('Primitive means omit inputs marked not applicable; these inputs are not assigned a score of zero.','原语均值不包含标为不适用的输入，也不将这些输入记为零分。')],
-    [t('Record the actual configuration','记录实际配置'),t('The four open-source entries use offline composite pipelines with shared Qwen3-Omni replies and distinct avatar backends. Native end-to-end system capability is not established by these runs.','四个开源条目采用共享 Qwen3-Omni 回应与不同数字人后端的离线组合流程；本轮结果不代表已验证各系统原生端到端能力。')],
-    [t('Evaluate the response, preserve the evidence','评价回应，保留证据'),t('Omni is evaluated directly, not computed as an audio–visual average. Q is the mean of nine per-input scores, not the mean of the nine column means. Evidence weights describe relevance, not causal importance.','Omni 独立评测，不由音频与视觉分数平均得到。Q 是每条输入九项分数的均值，不是九列均值再平均。证据权重描述相关性，不代表因果重要性。')]
-  ].map(([title,text],i)=>`<article><span>0${i+1}</span><div><h3>${title}</h3><p>${text}</p></div></article>`).join('')}</div></section>
-  <section class="release-note"><div>${icon('book',24)}<h3>${t('Research materials','研究资料')}</h3><p>${t('The leaderboard reports the current nine-system JEV 1.14.0 means. The paper, public dataset, and evaluation code are still pending release.','排行榜给出的是当前九系统的 JEV 1.14.0 均值。论文、公开数据集与评测代码仍待发布。')}</p></div><a class="button button-primary" href="#leaderboard">${t('Back to the leaderboard','返回排行榜')} ${icon('arrow',16)}</a></section>`;
+  const figures = [
+    {
+      id:'teaser', number:'01', label:'Figure 1', src:'./media/paper/teaser.webp', width:2200, height:946,
+      title:['Fluent replies can miss the unspoken','流畅的回应，也可能错过言外之意'],
+      description:['Two missed-intent examples appear beside the paper’s nine-system leaderboard for intent fulfillment, response quality, and response time.','两个未能理解隐含意图的例子，与论文中九个系统的意图满足、回应质量和响应时间榜单并列展示。'],
+      alt:['Paper Figure 1: two examples of missed implicit intent and the UUBench leaderboard.','论文图 1：两个错过隐含意图的示例及 UUBench 榜单。']
+    },
+    {
+      id:'method', number:'02', label:'Figure 2', src:'./media/paper/method.webp', width:1800, height:1435,
+      title:['From a user clip to an evaluation','从真人输入到回应评测'],
+      description:['The method connects a human–avatar interaction, annotated intent and observable cues, response quality, primitive-level judgments, and evidence-based aggregation.','方法图将人机交互、人工标注的意图与可观察线索、回应质量、各线索维度的评分，以及基于证据的加权汇总连接起来。'],
+      alt:['Paper Figure 2: UUBench interaction, data annotation, and multimodal response evaluation pipeline.','论文图 2：UUBench 的交互、数据标注和多模态回应评测流程。']
+    },
+    {
+      id:'examples', number:'03', label:'Figure 3', src:'./media/paper/annotation.webp', width:1400, height:1316,
+      title:['User clips and digital human replies','真人片段与数字人回应示例'],
+      description:['Three examples pair sampled video frames with the spoken words from the user and the responding digital human.','三个案例将真人与数字人视频的抽帧画面和双方台词放在一起，展示论文分析的实际交互。'],
+      alt:['Paper Figure 3: three user clips and corresponding digital human responses, shown with frames and transcripts.','论文图 3：三组真人片段与数字人回应的画面及台词。']
+    },
+    {
+      id:'jev', number:'04', label:'Figure 5', src:'./media/paper/jev.webp', width:2200, height:930,
+      title:['Fact-Grounded Scoring JEV','基于事实的 JEV 评分模块'],
+      description:['Timestamped audio and visual observations, reply measurements, and a seven-anchor rubric support one quality or primitive judgment at a time.','JEV 使用带时间戳的音视频观察、回应测量结果和七级评分准则，每次只判断一项质量标准或一个线索维度。'],
+      alt:['Paper Figure 5: Fact-Grounded Scoring JEV module, from audiovisual facts and measurements to response judgments.','论文图 5：基于事实的 JEV 评分模块，从音视频事实和测量结果到回应评价。']
+    }
+  ];
+  return `<section class="paper-hero">
+    <div class="paper-hero-copy">
+      <div class="eyebrow"><span class="tiny-line"></span>03 / ${t('THE PAPER','研究论文')}</div>
+      <h1>UUBench:<br><em>Understanding the Unspoken</em></h1>
+      <p class="paper-subtitle">toward Full-Duplex Multimodal Interaction</p>
+      <p class="paper-intro">${t('The paper asks whether digital humans respond to the needs conveyed through speech, expression, gesture, and context—not just the literal words. These original figures show the benchmark, its annotation workflow, and the JEV scoring module.','论文探讨数字人能否回应由语音、表情、手势和语境传达的需求，而不只停留在字面内容。以下原图展示了评测基准、标注流程与 JEV 评分模块。')}</p>
+      <div class="paper-actions"><a class="button button-primary" href="https://arxiv.org/abs/2611.30157" target="_blank" rel="noopener noreferrer">${icon('book',17)} ${t('Read on arXiv','在 arXiv 阅读')} ${icon('external',15)}</a><a class="button button-outline" href="https://arxiv.org/pdf/2611.30157" target="_blank" rel="noopener noreferrer">${t('Open PDF','打开 PDF')} ${icon('external',15)}</a></div>
+    </div>
+    <aside class="paper-meta" aria-label="${t('Paper details','论文信息')}"><span class="paper-meta-kicker">arXiv:2611.30157</span><strong>Ye Pan et al.</strong><span>${t('v0.1 Preview · November 2026','v0.1 预览版 · 2026 年 11 月')}</span><span>${t('49 pages · Figures and appendix','49 页 · 含配图与附录')}</span></aside>
+  </section>
+  <nav class="paper-outline" aria-label="${t('Figures on this page','本页配图')}"><span>${t('EXPLORE THE FIGURES','浏览论文配图')}</span><div>${figures.map(f=>`<button type="button" data-paper-target="paper-${f.id}"><b>${f.label}</b>${esc(t(...f.title))}</button>`).join('')}</div></nav>
+  <div class="paper-gallery">${figures.map(f=>`<figure class="paper-figure" id="paper-${f.id}">
+    <div class="paper-figure-heading"><div><div class="eyebrow">${f.label.toUpperCase()} / ${t('FROM THE PAPER','论文原图')}</div><h2>${esc(t(...f.title))}</h2></div><span class="paper-figure-number">${f.number}</span></div>
+    <a class="paper-image-link" href="${f.src}" target="_blank" rel="noopener noreferrer" aria-label="${t('Open full-size','查看高清原图')} · ${f.label}"><img src="${f.src}" width="${f.width}" height="${f.height}" loading="lazy" decoding="async" alt="${esc(t(...f.alt))}"><span>${icon('external',14)} ${t('Open full size','查看高清原图')}</span></a>
+    <figcaption><strong>${f.label}.</strong> ${esc(t(...f.description))}</figcaption>
+  </figure>`).join('')}</div>
+  <section class="paper-end"><div><span class="eyebrow">${t('THE COMPLETE PAPER','完整论文')}</span><h2>${t('Read the methods, results, and appendices.','查看完整方法、结果与附录。')}</h2><p>${t('The figures above are rendered from the files included in the arXiv submission. The full manuscript contains the scoring definitions, experiments, worked examples, and limitations.','本页配图由 arXiv 投稿源文件中的原图转换而来。完整论文包含评分定义、实验、详细案例与局限性。')}</p></div><a class="button button-primary" href="https://arxiv.org/abs/2611.30157" target="_blank" rel="noopener noreferrer">${t('View paper on arXiv','查看 arXiv 论文')} ${icon('external',16)}</a></section>`;
 }
 function render() {
   document.documentElement.lang=state.lang==='en'?'en':'zh-CN';
-  document.title=`UUBench — ${state.view==='cases'?t('Case Studies','案例展示'):state.view==='methodology'?t('The Benchmark','评测基准'):t('Understanding the Unspoken','理解未说出口的意图')}`;
+  document.title=`UUBench — ${state.view==='cases'?t('Case Studies','案例展示'):state.view==='methodology'?t('Research Paper','研究论文'):t('Understanding the Unspoken','理解未说出口的意图')}`;
   $('#app').innerHTML=`${header()}<main id="main" class="page-container">${state.view==='leaderboard'?leaderboard():state.view==='cases'?caseStudies():methodology()}</main>${footer()}`;
   bind();
 }
@@ -219,6 +251,7 @@ $('#app').addEventListener('play',e=>{
 },true);
 $('#app').addEventListener('click',e=>{
   const el=e.target.closest('button');if(!el)return;
+  if(el.dataset.paperTarget){document.getElementById(el.dataset.paperTarget)?.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(el.dataset.filter){state.filter=el.dataset.filter;render();return;}
   if(el.dataset.metric){state.metric=el.dataset.metric;render();return;}
   if(el.dataset.model){showModel(el.dataset.model);return;}
@@ -226,7 +259,6 @@ $('#app').addEventListener('click',e=>{
     case 'language':state.lang=state.lang==='en'?'zh':'en';render();break;
     case 'reset':state.search='';state.filter='all';render();break;
     case 'export':exportCSV();break;
-    case 'paper':showDialog(t('Paper · Coming soon','论文 · 待发布'),`<span class="dialog-kicker">UUBench</span><h3 class="paper-title">UUBench: Understanding the Unspoken toward Full-Duplex Multimodal Interaction</h3><p>${t('The manuscript and publication link are not yet released. The leaderboard already shows the JEV 1.14.0 means.','论文与公开链接尚未发布。排行榜已经给出 JEV 1.14.0 的均值。')}</p><button id="dialog-method" class="button button-primary">${t('Explore the benchmark','了解评测方法')} ${icon('arrow',16)}</button>`);$('#dialog-method').onclick=()=>{$('#detail-dialog').close();navigate('methodology');};break;
     case 'metrics':showDialog(t('Reading the scores','分数说明'),`<div class="metric-explainer"><strong>S · ${t('Intent evidence','意图证据')}</strong><p>${t('Eight cue scores and one evidence-weighted mean. Scale −3 to +3. Primitive means use applicable inputs only; their denominators are 209, 203, 214, 20, 95, 214, 132 and 132.','八项线索分与一项证据加权均值。量表 −3 至 +3。原语均值只统计适用输入，分母依次为 209、203、214、20、95、214、132、132。')}</p><strong>Q · ${t('Response quality','回应质量')}</strong><p>${t('Three modalities × three criteria. Each input’s Q is the unweighted mean of the nine scores; the board averages those 216 values. Scale −3 to +3.','三种模态 × 三项准则。每条输入的 Q 是九项分数的等权均值，榜上再对这 216 个值取平均。量表 −3 至 +3。')}</p><strong>t · ${t('Response time','响应时间')}</strong><p>${t('Not one shared clock. A dash means the timestamp was not measured. A negative value means the logged event started before the input ended.','不是同一把时钟。横线表示没有测到时间戳。负值表示记录到的事件早于输入结束。')}</p></div>`);break;
   }
 });
