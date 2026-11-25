@@ -52,18 +52,3 @@ export const systems = [
   { id: 'vtuber', name: 'Open-LLM-VTuber', variant: 'Live2D', type: 'open', mark: 'V', color: '#a66888', latencyNote: openLatency, results: scoreRow([2.6012962962962964, 2.595277777777778, 1.92, 1.9101388888888888, 1.4312037037037035, -0.713287037037037, 0.8023611111111111, 1.8749537037037038, -0.15226851851851853], [0.2921531100478469, 0.011576354679802952, 0.6877570093457944, 0.217, -0.19473684210526315, -0.12649532710280376, -0.24818181818181817, -0.19643939393939394], 1.3632973251028806, 0.1281351272312881, 10.419655372952143) },
   { id: 'empaava', name: 'EmpaAva', variant: 'GaussianAvatars', type: 'open', mark: 'E', color: '#b16b4f', latencyNote: openLatency, results: scoreRow([2.5730092592592593, 2.5941666666666667, 1.9225925925925924, 1.8202777777777779, 0.16527777777777775, -1.2406944444444445, 0.6226851851851852, 1.052037037037037, -0.4236574074074074], [0.2549760765550239, 0.014630541871921173, 0.6633644859813085, 0.152, -0.2532631578947368, -0.19574766355140188, -0.2828787878787879, -0.25795454545454544], 1.0095216049382716, 0.09042103308783528, 4.857793409672417) }
 ].map(s => ({ ...s, status: 'published' }));
-
-export const scenarios = [
-  { id: 'support', name: ['A need for support', '寻求理解与支持'],
-    quote: ['“I thought today would be different.”', '“我本来以为，今天会不一样。”'],
-    cues: [['Quiet voice', '轻声表达'], ['Downward gaze', '视线低垂'], ['A long pause', '长停顿']],
-    intent: ['The words describe a day. The context may be asking for understanding.', '话语在描述这一天，语境可能表达了希望被理解的需求。'] },
-  { id: 'clarify', name: ['A need for clarification', '寻求进一步解释'],
-    quote: ['“Right… I think I follow.”', '“嗯……我想我明白了。”'],
-    cues: [['Hesitant delivery', '迟疑的语气'], ['Furrowed brow', '眉头紧皱'], ['Head tilt', '头部微倾']],
-    intent: ['A verbal agreement can coexist with uncertainty. A helpful response checks understanding.', '口头赞同也可能伴随疑惑，恰当的回应需要确认对方是否理解。'] },
-  { id: 'share', name: ['An invitation to share', '邀请分享喜悦'],
-    quote: ['“You’ll never guess what happened!”', '“你绝对猜不到发生了什么！”'],
-    cues: [['Lively intonation', '活跃的语调'], ['A broad smile', '明显的笑容'], ['Forward lean', '身体前倾']],
-    intent: ['The speaker may be inviting curiosity and shared excitement, rather than a literal guess.', '说话者可能在邀请对方好奇地参与、分享兴奋，而非要求字面上的猜测。'] }
-];

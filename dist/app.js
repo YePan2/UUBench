@@ -1,9 +1,11 @@
-import { systems, qualityMetrics, evidenceMetrics, scenarios, evidenceN, sampleN } from './data.js?v=20261125';
+import { systems, qualityMetrics, evidenceMetrics, evidenceN, sampleN } from './data.js?v=20261125';
+
+import { cases } from './cases.js?v=20261125-cases';
+const route = () => location.hash === '#arena' ? 'cases' : ['cases', 'methodology'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'leaderboard';
 
 const state = {
-  lang: 'en', view: ['arena', 'methodology'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'leaderboard',
-  filter: 'all', search: '', metric: 'overview', selected: [],
-  left: 'tavus', right: 'openavatar', scenario: 0, blind: false, vote: null
+  lang: 'en', view: route(),
+  filter: 'all', search: '', metric: 'overview'
 };
 const $ = s => document.querySelector(s);
 const t = (en, zh) => state.lang === 'zh' ? zh : en;
@@ -60,7 +62,7 @@ function header() {
   return `<header class="site-header"><div class="nav-inner">
     <a class="brand" href="#leaderboard" aria-label="UUBench home"><img src="./favicon.svg" alt="" width="33" height="33"><span>UUBench<span class="brand-dot">.</span></span></a>
     <nav aria-label="${t('Main navigation','主导航')}">
-      ${[['leaderboard','Leaderboard','排行榜'],['arena','Arena','擂台'],['methodology','Benchmark','评测方法']].map(([id,en,zh]) => `<a href="#${id}" ${state.view===id?'aria-current="page"':''}>${t(en,zh)}${id==='arena'?'<span class="nav-tag">BETA</span>':''}</a>`).join('')}
+      ${[['leaderboard','Leaderboard','排行榜'],['cases','Case studies','案例展示'],['methodology','Benchmark','评测方法']].map(([id,en,zh]) => `<a href="#${id}" ${state.view===id?'aria-current="page"':''}>${t(en,zh)}</a>`).join('')}
     </nav>
     <div class="nav-actions"><button class="language-button" data-action="language" aria-label="${t('切换到中文','Switch to English')}">${t('EN <span>/ 中文</span>','中文 <span>/ EN</span>')}</button><button class="button button-small button-outline paper-button" data-action="paper">${icon('book',15)} ${t('Paper','论文')} <span class="soon">${t('Soon','待发布')}</span></button></div>
   </div></header>`;
@@ -72,7 +74,7 @@ function hero() {
   return `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="tiny-line"></span>${t('THE DIGITAL HUMAN BENCHMARK','数字人隐式意图回应评测')}</div>
     <h1>${t('Understanding<br>the <em>unspoken.</em>','理解那些<br><em>未说出口的意图。</em>')}</h1>
     <p>${t('Can digital humans read between the lines?<br>Evaluating how they hear, see, and respond to implicit intent.','数字人能否听懂弦外之音？<br>从声音、画面与实际回应，评估对隐式意图的理解。')}</p>
-    <div class="hero-actions"><a class="button button-primary" href="#arena">${icon('compare')} ${t('Enter the arena','进入擂台')} ${icon('arrow',16)}</a><a class="text-link" href="#methodology">${t('Explore the benchmark','了解评测基准')} ${icon('external',16)}</a></div>
+    <div class="hero-actions"><a class="button button-primary" href="#cases">${icon('compare')} ${t('Explore the cases','查看真实案例')} ${icon('arrow',16)}</a><a class="text-link" href="#methodology">${t('Explore the benchmark','了解评测基准')} ${icon('external',16)}</a></div>
   </div><div class="hero-art" aria-label="${t('Audio and visual cues inform implicit intent and a digital human response.','声音和视觉线索共同支持隐式意图与数字人回应。')}">
     <div class="art-grid"></div><div class="orbit orbit-outer"></div><div class="orbit orbit-inner"></div>
     <svg class="signal-lines" viewBox="0 0 520 300" aria-hidden="true"><path d="M92 82C180 82 170 147 250 147S340 79 431 79M96 231C175 231 173 151 250 151S346 222 434 222"/><path class="signal-dash" d="M92 82C180 82 170 147 250 147S340 79 431 79M96 231C175 231 173 151 250 151S346 222 434 222"/></svg>
@@ -118,11 +120,10 @@ function leaderboard() {
   <div class="leaderboard-panel"><div class="metric-tabs" role="tablist" aria-label="${t('Metric view','指标视图')}">${[['overview','Overview','概览'],['quality','Response quality · Q','回应质量 · Q'],['evidence','Intent evidence · S','意图证据 · S']].map(([v,en,zh])=>`<button role="tab" aria-selected="${state.metric===v}" class="${state.metric===v?'active':''}" data-metric="${v}">${t(en,zh)}</button>`).join('')}<button class="metric-help" data-action="metrics" aria-label="${t('About these metrics','指标说明')}">${icon('info',17)}</button></div>
     <div class="table-toolbar"><div class="filter-group" aria-label="${t('Filter systems','筛选系统')}">${[['all','All systems','全部',9],['closed','Closed','闭源',5],['open','Open','开源',4]].map(([v,en,zh,n])=>`<button data-filter="${v}" aria-pressed="${state.filter===v}" class="${state.filter===v?'active':''}">${t(en,zh)}<span>${n}</span></button>`).join('')}</div><div class="table-controls"><label class="search-box">${icon('search',16)}<input id="model-search" type="search" value="${esc(state.search)}" placeholder="${t('Find a system…','搜索系统…')}" aria-label="${t('Find a system','搜索系统')}"></label></div></div>
     <div id="table-container" role="tabpanel">${table()}</div>
-    <div class="table-footer"><span id="row-count">${tableCount()}</span><span>${icon('compare',14)}${t('Select two systems to compare','选择两个系统进行对比')}</span></div>
+    <div class="table-footer"><span id="row-count">${tableCount()}</span><span><a href="#cases">${t('Watch real response examples','观看真实回应案例')}</a></span></div>
   </div><div class="table-notes"><span>${t('Q and S: n = 216 on every system','Q 与 S：每个系统 n = 216')}</span><span>${t('Primitive n: A1–A4, V1–V4 = 209, 203, 214, 20, 95, 214, 132, 132','原语有效数：A1–A4、V1–V4 = 209、203、214、20、95、214、132、132')}</span><span>${t('Sorted by the summary score, not by name','按汇总分排序，不按名称')}</span></div>
   </section>
-  <section class="bottom-feature"><div class="feature-symbol">${icon('compare',35)}</div><div><div class="eyebrow">${t('BEYOND THE NUMBERS','在分数之外')}</div><h3>${t('Same context. Two different responses.','同一语境，两种回应。')}</h3><p>${t('Step into the arena to explore side-by-side comparison and the cues behind each response.','进入双模型擂台，并排观察回应，以及回应背后的意图线索。')}</p></div><a href="#arena" class="button button-outline">${t('Explore the arena','探索擂台')} ${icon('arrow',17)}</a></section>
-  <div id="compare-tray">${compareTray()}</div>`;
+  <section class="bottom-feature"><div class="feature-symbol">${icon('compare',35)}</div><div><div class="eyebrow">${t('BEYOND THE NUMBERS','在分数之外')}</div><h3>${t('Three moments. Three ways to respond.','三个语境，三种回应。')}</h3><p>${t('Watch real user clips and responses from Emma, Tavus, and Vidu. Explore what was said—and what was meant.','观看真人输入与 Emma、Tavus、Vidu 的实际回应，了解字面表达与言外之意。')}</p></div><a href="#cases" class="button button-outline">${t('Explore the cases','查看案例')} ${icon('arrow',17)}</a></section>`;
 }
 function sortValue(s) { return state.metric === 'evidence' ? result(s).S : result(s).Qmean; }
 function filtered() {
@@ -150,45 +151,21 @@ function table() {
     return [id, values.length ? Math.max(...values) : null];
   }));
   const sortLabel = state.metric === 'evidence' ? 'S ↓' : 'Q ↓';
-  return `<div class="table-scroll" tabindex="0" aria-label="${t('System results table; scroll horizontally for more metrics','系统结果表，可横向滚动查看全部指标')}"><table><thead><tr><th class="check-col"><span class="sr-only">${t('Select','选择')}</span></th><th class="rank-col">${t('Rank','名次')}</th><th class="system-col">${t('System','系统')} <span class="sort-label">${sortLabel}</span></th><th class="type-col">${t('Access','类别')}</th>${cols.map(([id,label,category])=>`<th class="score-col ${id==='S'||id==='Qmean'?'s-column':''}" title="${esc(label)}"><span>${category}</span>${label}</th>`).join('')}<th class="valid-col"><span>${t('Valid','有效')}</span>n</th><th class="details-col"><span class="sr-only">${t('Details','详情')}</span></th></tr></thead><tbody>
-    ${filtered().map(s=>`<tr><td class="check-col"><input type="checkbox" data-select="${s.id}" ${state.selected.includes(s.id)?'checked':''} aria-label="${t('Compare','对比')} ${s.name}"></td><td class="rank-col">${rankOf(ranks, s.id)}</td><td class="system-col"><button class="model-button" data-model="${s.id}">${mark(s)}<span><strong>${s.name}</strong><small>${s.variant}</small></span></button></td><td><span class="type-pill ${s.type}">${s.type==='open'?icon('code',12):icon('lock',11)}${group(s)}</span></td>${cols.map(([id])=>{const value=cellValue(s,id);const bestCell=value!=null&&value===best[id]?' best':'';const text=id==='latency'&&value!=null?`${score(value)} s`:score(value);return `<td class="number${id==='S'||id==='Qmean'?' s-column':''}${bestCell}">${text}</td>`;}).join('')}<td class="number">${score(result(s).valid_n, 0)}</td><td><button class="icon-button" data-model="${s.id}" aria-label="${s.name} ${t('details','详情')}">${icon('external',16)}</button></td></tr>`).join('')}
-    ${filtered().length?'':`<tr><td colspan="${cols.length+6}" class="empty-state">${icon('search',26)}<strong>${t('No matching systems','没有匹配的系统')}</strong><p>${t('Try a different name or reset the filters.','请尝试其他名称，或重置筛选条件。')}</p><button class="button button-outline" data-action="reset">${t('Reset filters','重置筛选')}</button></td></tr>`}
+  return `<div class="table-scroll" tabindex="0" aria-label="${t('System results table; scroll horizontally for more metrics','系统结果表，可横向滚动查看全部指标')}"><table><thead><tr><th class="rank-col">${t('Rank','名次')}</th><th class="system-col">${t('System','系统')} <span class="sort-label">${sortLabel}</span></th><th class="type-col">${t('Access','类别')}</th>${cols.map(([id,label,category])=>`<th class="score-col ${id==='S'||id==='Qmean'?'s-column':''}" title="${esc(label)}"><span>${category}</span>${label}</th>`).join('')}<th class="valid-col"><span>${t('Valid','有效')}</span>n</th><th class="details-col"><span class="sr-only">${t('Details','详情')}</span></th></tr></thead><tbody>
+    ${filtered().map(s=>`<tr><td class="rank-col">${rankOf(ranks, s.id)}</td><td class="system-col"><button class="model-button" data-model="${s.id}">${mark(s)}<span><strong>${s.name}</strong><small>${s.variant}</small></span></button></td><td><span class="type-pill ${s.type}">${s.type==='open'?icon('code',12):icon('lock',11)}${group(s)}</span></td>${cols.map(([id])=>{const value=cellValue(s,id);const bestCell=value!=null&&value===best[id]?' best':'';const text=id==='latency'&&value!=null?`${score(value)} s`:score(value);return `<td class="number${id==='S'||id==='Qmean'?' s-column':''}${bestCell}">${text}</td>`;}).join('')}<td class="number">${score(result(s).valid_n, 0)}</td><td><button class="icon-button" data-model="${s.id}" aria-label="${s.name} ${t('details','详情')}">${icon('external',16)}</button></td></tr>`).join('')}
+    ${filtered().length?'':`<tr><td colspan="${cols.length+5}" class="empty-state">${icon('search',26)}<strong>${t('No matching systems','没有匹配的系统')}</strong><p>${t('Try a different name or reset the filters.','请尝试其他名称，或重置筛选条件。')}</p><button class="button button-outline" data-action="reset">${t('Reset filters','重置筛选')}</button></td></tr>`}
   </tbody></table></div>`;
 }
-function compareTray() {
-  if (!state.selected.length) return '';
-  return `<div class="compare-tray"><span>${state.selected.length}/2 ${t('selected','已选')}</span><div>${state.selected.map(id=>`<button class="selected-chip" data-remove="${id}">${systems.find(s=>s.id===id).name} ${icon('close',13)}</button>`).join('')}</div><button class="button button-primary" data-action="compare" ${state.selected.length!==2?'disabled':''}>${t('Compare in arena','进入擂台对比')} ${icon('arrow',16)}</button><button class="icon-button" data-action="clear" aria-label="${t('Clear selection','清空选择')}">${icon('close')}</button></div>`;
+function caseVideo(media, label) {
+  return `<div class="case-video"><video controls playsinline preload="none" poster="${esc(media.poster)}" aria-label="${esc(label)}"><source src="${esc(media.video)}" type="video/mp4"><a href="${esc(media.video)}">${t('Download video','下载视频')}</a></video></div>`;
 }
-function arena() {
-  const scenario = scenarios[state.scenario];
-  const left = systems.find(s => s.id === state.left);
-  const right = systems.find(s => s.id === state.right);
-  const pair = (pick, suffix = '') => {
-    const show = system => { const value = pick(system); return value == null ? dash() : `${score(value)}${suffix}`; };
-    return `<strong>${show(left)} <i>/</i> ${show(right)}</strong>`;
-  };
-  return `<section class="inner-heading"><div class="eyebrow">02 / ${t('HEAD TO HEAD','双模型对战')}</div><h1>${t('The digital human <em>arena.</em>','数字人<em>对战擂台。</em>')}</h1><p>${t('One moment. Two responses. Which one understands the intent?','同一个瞬间，两种回应。谁更懂用户的意图？')}</p></section>
-  <div class="notice">${icon('info',17)}<p><strong>${t('Interaction preview.','交互预览。')}</strong> ${t('Scenarios are illustrative. Response videos are not attached yet. The scores below are the published JEV means.','场景为说明性示例。回应视频尚未接入。下方分数是已发布的 JEV 均值。')}</p><span class="notice-tag">DEMO</span></div>
-  <section class="arena-panel"><div class="arena-toolbar"><div class="eyebrow">${t('SIDE-BY-SIDE COMPARISON','并排对比')}</div><div><label class="switch-label"><input id="blind-mode" type="checkbox" ${state.blind?'checked':''}><span class="switch"></span>${t('Blind mode','匿名模式')}</label><button class="button button-small button-outline" data-action="shuffle">${icon('shuffle',15)}${t('Random pair','随机配对')}</button></div></div>
-    <div class="matchup"><div class="matchup-side"><span class="contender">A</span>${systemSelect('left')}</div><button data-action="swap" class="versus" aria-label="${t('Swap systems','交换系统')}">${icon('compare',18)}<span>VS</span></button><div class="matchup-side"><span class="contender contender-b">B</span>${systemSelect('right')}</div></div>
-    <div class="scenario-panel"><div class="scenario-top"><span class="eyebrow">${icon('audio',16)}${t('THE USER CONTEXT','用户语境')}</span><label class="scenario-select"><span class="sr-only">${t('Illustrative scenario','示例场景')}</span><select id="scenario">${scenarios.map((s,i)=>`<option value="${i}" ${i===state.scenario?'selected':''}>${String(i+1).padStart(2,'0')} / ${t(...s.name)}</option>`).join('')}</select></label></div><blockquote>${t(...scenario.quote)}</blockquote><div class="cue-chips">${scenario.cues.map(c=>`<span><span class="cue-dot"></span>${t(...c)}</span>`).join('')}</div><p>${t(...scenario.intent)}</p><small class="illustration-label">${t('ILLUSTRATIVE SCENARIO · NOT A BENCHMARK SAMPLE','说明性场景 · 非真实评测样本')}</small></div>
-    <div class="response-grid">${responseCard('left','A')}${responseCard('right','B')}</div>
-    <div class="ballot"><div><h3>${t('Which response better understands the user?','哪一个回应更懂用户？')}</h3><p>${t('Try the ballot interaction. Demo choices stay in this tab and do not affect any scores.','可试用投票交互。演示选择仅保留在本标签页，不计入任何成绩。')}</p></div><div class="vote-buttons">${[['a',t('A is better','A 更好')],['tie',t('Tie','平局')],['b',t('B is better','B 更好')],['skip',t('Skip','跳过')]].map(([id,label])=>`<button class="button ${state.vote===id?'button-primary':'button-outline'}" data-vote="${id}" aria-pressed="${state.vote===id}">${state.vote===id?icon('check',15):''}${label}</button>`).join('')}</div><div class="vote-feedback" aria-live="polite">${state.vote?t('Demo selection recorded. No research vote was submitted.','已记录演示选择，未提交研究投票。'):t('Demo ballot · No model response media attached','演示投票 · 尚未接入模型回应媒体')}</div></div>
-  </section>
-  <section class="comparison-section"><div class="section-heading"><div><h2>${t('Under the same lens','同一尺度下的对比')}</h2><p>${t('JEV 1.14.0 means. Left is A, right is B.','JEV 1.14.0 均值。左为 A，右为 B。')}</p></div></div><div class="comparison-metrics">${[
-    ['S', t('Intent response','意图回应'), '−3 → +3', pair(s => result(s).S)],
-    ['Q', t('Quality mean','质量均值'), '−3 → +3', pair(s => result(s).Qmean)],
-    ['t', t('Response time','响应时间'), t('seconds','秒'), pair(s => result(s).latency, ' s')]
-  ].map(([id,label,range,value])=>`<div><span>${id}</span><div><h3>${label}</h3><p>${range}</p></div>${value}</div>`).join('')}</div><p class="protocol-note">${icon('info',16)}${t('Open-source entries use an offline composite pipeline with shared Qwen3-Omni responses. This setup is distinct from native end-to-end product evaluation.','开源条目采用共享 Qwen3-Omni 回应的离线组合流程，配置区别于原生端到端产品评测。')}</p></section>`;
-}
-function systemSelect(side) {
-  const id=state[side], s=systems.find(s=>s.id===id);
-  if(state.blind) return `<div class="blind-identity"><span class="model-mark blind-mark">?</span><div><strong>${t('Anonymous system','匿名系统')} ${side==='left'?'A':'B'}</strong><small>${t('Identity hidden for this preview','本次预览已隐藏身份')}</small></div></div>`;
-  return `${mark(s)}<label class="system-select"><span class="sr-only">${t('System','系统')} ${side==='left'?'A':'B'}</span><select id="${side}-system">${systems.map(m=>`<option value="${m.id}" ${m.id===id?'selected':''} ${m.id===state[side==='left'?'right':'left']?'disabled':''}>${m.name}</option>`).join('')}</select><small>${group(s)} · ${s.type==='open'?t('Offline composite','离线组合'):t('Product configuration','产品配置')}</small></label>`;
-}
-function responseCard(side,letter) {
-  const s=systems.find(s=>s.id===state[side]);
-  return `<article class="response-card"><div class="response-top"><span>${t('RESPONSE','回应')} ${letter}</span><span class="pending-label"><span></span>${t('Awaiting media','等待媒体')}</span></div><div class="media-placeholder"><div class="media-corners"></div><div class="video-symbol">${icon('video',30)}</div><h3>${t('Response video','回应视频')}</h3><p>${t('A real response belongs here.','此处将展示真实的模型回应。')}<br>${t('Media will be added with the release.','媒体将在正式发布时接入。')}</p><span class="placeholder-line"></span></div><div class="response-bottom"><span>${state.blind?t('Anonymous system','匿名系统')+' '+letter:s.name}</span><small>${t('VIDEO + AUDIO','视频 + 音频')}</small></div></article>`;
+function caseStudies() {
+  return `<section class="inner-heading cases-heading"><div class="eyebrow">02 / ${t('REAL CONVERSATIONS','真实对话案例')}</div><h1>${t('What is said.<br><em>What is meant.</em>','说出的话，<br><em>未说出的意图。</em>')}</h1><p>${t('Three user clips. Responses from Emma, Tavus, and Vidu. Watch how each system responds to the intent beneath the words.','三个真人片段，Emma、Tavus 和 Vidu 的实际回应。观察不同系统如何回应字面表达背后的意图。')}</p></section>
+  <nav class="case-jumps" aria-label="${t('Jump to a case','跳转至案例')}">${cases.map((c,i)=>`<button data-case-target="case-${c.id}"><span>0${i+1}</span>${esc(t(...c.title))}${icon('arrow',16)}</button>`).join('')}</nav>
+  <div class="case-studies">${cases.map((c,i)=>`<section class="case-study" id="case-${c.id}" aria-labelledby="title-${c.id}"><header class="case-heading"><span class="case-number">0${i+1}</span><div><div class="eyebrow">${t('CASE STUDY','案例展示')} · ${t('CLIP','片段')} ${Number(c.id)}</div><h2 id="title-${c.id}">${esc(t(...c.title))}</h2></div></header>
+    <div class="human-case"><div class="human-media"><h3>${icon('video',17)}${t('Human input','真人输入')}</h3>${caseVideo(c.human,t('Human input','真人输入')+' · '+c.id)}</div><div class="human-context"><div><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(c.human.transcript)}</blockquote></div><div class="unspoken-intent"><h4>${icon('spark',16)}Unspoken intent${t('',' · 隐含意图')}</h4><p>${esc(t(...c.intent))}</p></div></div></div>
+    <div class="case-response-heading"><h3>${t('How the digital humans respond','数字人如何回应')}</h3><span>${t('Same input · Three responses','同一输入 · 三个回应')}</span></div>
+    <div class="case-response-grid">${c.responses.map(r=>`<article class="case-response"><h3>${mark(systems.find(s=>s.name===r.name))}${r.name}</h3>${caseVideo(r,r.name+' · '+t('Clip','片段')+' '+Number(c.id))}<div class="case-response-copy"><h4>${t('TRANSCRIPT','台词')}</h4><blockquote lang="en">${esc(r.transcript)}</blockquote><div class="case-analysis"><h4>${t('RESPONSE ANALYSIS','回应分析')}</h4><p>${esc(t(...r.analysis))}</p></div></div></article>`).join('')}</div></section>`).join('')}</div>`;
 }
 function methodology() {
   return `<section class="inner-heading"><div class="eyebrow">03 / ${t('THE BENCHMARK','评测基准')}</div><h1>${t('More than a<br><em>convincing face.</em>','不止于<br><em>逼真的面孔。</em>')}</h1><p>${t('UUBench evaluates whether generated responses meet the needs expressed through words, voice, and visible behavior.','UUBench 评估数字人生成的回应，是否满足由话语、声音和可见行为所表达的需求。')}</p></section>
@@ -205,11 +182,11 @@ function methodology() {
 }
 function render() {
   document.documentElement.lang=state.lang==='en'?'en':'zh-CN';
-  document.title=`UUBench — ${state.view==='arena'?t('Digital Human Arena','数字人擂台'):state.view==='methodology'?t('The Benchmark','评测基准'):t('Understanding the Unspoken','理解未说出口的意图')}`;
-  $('#app').innerHTML=`${header()}<main id="main" class="page-container">${state.view==='leaderboard'?leaderboard():state.view==='arena'?arena():methodology()}</main>${footer()}`;
+  document.title=`UUBench — ${state.view==='cases'?t('Case Studies','案例展示'):state.view==='methodology'?t('The Benchmark','评测基准'):t('Understanding the Unspoken','理解未说出口的意图')}`;
+  $('#app').innerHTML=`${header()}<main id="main" class="page-container">${state.view==='leaderboard'?leaderboard():state.view==='cases'?caseStudies():methodology()}</main>${footer()}`;
   bind();
 }
-function renderTable() {$('#table-container').innerHTML=table();$('#row-count').textContent=tableCount();$('#compare-tray').innerHTML=compareTray();}
+function renderTable() {$('#table-container').innerHTML=table();$('#row-count').textContent=tableCount();}
 function notify(message) {clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').classList.add('visible');toastTimer=setTimeout(()=>$('#toast').classList.remove('visible'),4200);}
 function showDialog(title, body) {
   const d=$('#detail-dialog');
@@ -223,8 +200,8 @@ function showModel(id) {
   const q = rankOf(qRank(), id);
   const sv = rankOf(sRank(), id);
   const latency = result(s).latency;
-  showDialog(s.name,`<div class="model-dialog-intro">${mark(s)}<div><strong>${s.variant}</strong><span class="type-pill ${s.type}">${group(s)}</span></div></div><div class="dialog-status posted"><span class="status-dot live"></span>JEV 1.14.0 · n = ${sampleN}</div><dl><dt>Q</dt><dd>${score(result(s).Qmean)} · ${t('rank','名次')} ${q}/9</dd><dt>S</dt><dd>${score(result(s).S)} · ${t('rank','名次')} ${sv}/9</dd><dt>${t('Response time','响应时间')}</dt><dd>${latency==null?dash():`${score(latency)} s`}</dd><dt>${t('Configuration','配置')}</dt><dd>${s.type==='open'?t('Offline composite · shared Qwen3-Omni response, avatar backend ','离线组合 · 共享 Qwen3-Omni 回应，数字人后端 ')+s.variant:t('Commercial product configuration','商业产品配置')}</dd></dl><p class="dialog-note">${t(...s.latencyNote)}</p><button class="button button-primary" id="dialog-compare">${t('Compare this system','对比此系统')} ${icon('arrow',16)}</button>`);
-  $('#dialog-compare').onclick=()=>{state.left=id;if(state.right===id)state.right=systems.find(x=>x.id!==id).id;state.vote=null;$('#detail-dialog').close();navigate('arena');};
+  showDialog(s.name,`<div class="model-dialog-intro">${mark(s)}<div><strong>${s.variant}</strong><span class="type-pill ${s.type}">${group(s)}</span></div></div><div class="dialog-status posted"><span class="status-dot live"></span>JEV 1.14.0 · n = ${sampleN}</div><dl><dt>Q</dt><dd>${score(result(s).Qmean)} · ${t('rank','名次')} ${q}/9</dd><dt>S</dt><dd>${score(result(s).S)} · ${t('rank','名次')} ${sv}/9</dd><dt>${t('Response time','响应时间')}</dt><dd>${latency==null?dash():`${score(latency)} s`}</dd><dt>${t('Configuration','配置')}</dt><dd>${s.type==='open'?t('Offline composite · shared Qwen3-Omni response, avatar backend ','离线组合 · 共享 Qwen3-Omni 回应，数字人后端 ')+s.variant:t('Commercial product configuration','商业产品配置')}</dd></dl><p class="dialog-note">${t(...s.latencyNote)}</p>${['emma','tavus','vidu'].includes(id)?`<button class="button button-primary" id="dialog-cases">${t('View case studies','查看案例')} ${icon('arrow',16)}</button>`:''}`);
+  const casesButton=$('#dialog-cases');if(casesButton)casesButton.onclick=()=>{$('#detail-dialog').close();navigate('cases');};
 }
 function navigate(view) {if(location.hash==='#'+view){state.view=view;render();window.scrollTo(0,0);}else location.hash=view;}
 function exportCSV() {
@@ -235,36 +212,25 @@ function exportCSV() {
   const a=document.createElement('a');a.href=url;a.download=`uubench-jev-${state.filter}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   notify(t('Exported the current table. Empty cells were not measured.','已导出当前表格。空单元格表示未测。'));
 }
-function resetVote() {state.vote=null;render();}
 function bind() {
   const search=$('#model-search');if(search)search.oninput=e=>{state.search=e.target.value;renderTable();};
-  for(const side of ['left','right']){const input=$(`#${side}-system`);if(input)input.onchange=e=>{state[side]=e.target.value;resetVote();};}
-  const scenario=$('#scenario');if(scenario)scenario.onchange=e=>{state.scenario=Number(e.target.value);resetVote();};
-  const blind=$('#blind-mode');if(blind)blind.onchange=e=>{state.blind=e.target.checked;resetVote();};
 }
-$('#app').addEventListener('change',e=>{
-  const id=e.target.dataset.select;if(!id)return;
-  if(e.target.checked){if(state.selected.length===2){e.target.checked=false;notify(t('Select up to two systems. Remove one to change the matchup.','最多选择两个系统；请先移除其中一个。'));return;}state.selected.push(id);}else state.selected=state.selected.filter(x=>x!==id);
-  $('#compare-tray').innerHTML=compareTray();
-});
+$('#app').addEventListener('play',e=>{
+  if(e.target.tagName==='VIDEO')document.querySelectorAll('video').forEach(v=>{if(v!==e.target)v.pause();});
+},true);
 $('#app').addEventListener('click',e=>{
   const el=e.target.closest('button');if(!el)return;
   if(el.dataset.filter){state.filter=el.dataset.filter;render();return;}
   if(el.dataset.metric){state.metric=el.dataset.metric;render();return;}
   if(el.dataset.model){showModel(el.dataset.model);return;}
-  if(el.dataset.remove){state.selected=state.selected.filter(id=>id!==el.dataset.remove);renderTable();return;}
-  if(el.dataset.vote){state.vote=el.dataset.vote;const pos=window.scrollY;render();window.scrollTo(0,pos);return;}
+  if(el.dataset.caseTarget){document.getElementById(el.dataset.caseTarget)?.scrollIntoView({behavior:'smooth',block:'start'});return;}
   switch(el.dataset.action){
     case 'language':state.lang=state.lang==='en'?'zh':'en';render();break;
     case 'reset':state.search='';state.filter='all';render();break;
-    case 'clear':state.selected=[];renderTable();break;
-    case 'compare':if(state.selected.length===2){[state.left,state.right]=state.selected;state.vote=null;navigate('arena');}break;
-    case 'swap':[state.left,state.right]=[state.right,state.left];resetVote();break;
-    case 'shuffle':{const a=Math.floor(Math.random()*systems.length);const others=systems.filter((_,i)=>i!==a);state.left=systems[a].id;state.right=others[Math.floor(Math.random()*others.length)].id;resetVote();break;}
     case 'export':exportCSV();break;
     case 'paper':showDialog(t('Paper · Coming soon','论文 · 待发布'),`<span class="dialog-kicker">UUBench</span><h3 class="paper-title">UUBench: Understanding the Unspoken toward Full-Duplex Multimodal Interaction</h3><p>${t('The manuscript and publication link are not yet released. The leaderboard already shows the JEV 1.14.0 means.','论文与公开链接尚未发布。排行榜已经给出 JEV 1.14.0 的均值。')}</p><button id="dialog-method" class="button button-primary">${t('Explore the benchmark','了解评测方法')} ${icon('arrow',16)}</button>`);$('#dialog-method').onclick=()=>{$('#detail-dialog').close();navigate('methodology');};break;
     case 'metrics':showDialog(t('Reading the scores','分数说明'),`<div class="metric-explainer"><strong>S · ${t('Intent evidence','意图证据')}</strong><p>${t('Eight cue scores and one evidence-weighted mean. Scale −3 to +3. Primitive means use applicable inputs only; their denominators are 209, 203, 214, 20, 95, 214, 132 and 132.','八项线索分与一项证据加权均值。量表 −3 至 +3。原语均值只统计适用输入，分母依次为 209、203、214、20、95、214、132、132。')}</p><strong>Q · ${t('Response quality','回应质量')}</strong><p>${t('Three modalities × three criteria. Each input’s Q is the unweighted mean of the nine scores; the board averages those 216 values. Scale −3 to +3.','三种模态 × 三项准则。每条输入的 Q 是九项分数的等权均值，榜上再对这 216 个值取平均。量表 −3 至 +3。')}</p><strong>t · ${t('Response time','响应时间')}</strong><p>${t('Not one shared clock. A dash means the timestamp was not measured. A negative value means the logged event started before the input ended.','不是同一把时钟。横线表示没有测到时间戳。负值表示记录到的事件早于输入结束。')}</p></div>`);break;
   }
 });
-window.addEventListener('hashchange',()=>{state.view=['arena','methodology'].includes(location.hash.slice(1))?location.hash.slice(1):'leaderboard';render();window.scrollTo({top:0,behavior:'instant'});});
+window.addEventListener('hashchange',()=>{state.view=route();render();window.scrollTo({top:0,behavior:'instant'});});
 render();
