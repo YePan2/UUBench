@@ -64,6 +64,7 @@ function header() {
     <nav aria-label="${t('Main navigation','主导航')}">
       ${[['leaderboard','Leaderboard','排行榜'],['cases','Case studies','案例展示'],['methodology','Paper','论文']].map(([id,en,zh]) => `<a href="#${id}" ${state.view===id?'aria-current="page"':''}>${t(en,zh)}</a>`).join('')}
     </nav>
+    <div class="partner-logos" aria-label="${t('Research partners','研究合作单位')}"><img src="./gbu-logo.svg" alt="Great Bay University" width="90" height="22"><img src="./insight-labs-logo.svg" alt="inSIght Labs" width="102" height="22"></div>
     <div class="nav-actions"><button class="language-button" data-action="language" aria-label="${t('切换到中文','Switch to English')}">${t('EN <span>/ 中文</span>','中文 <span>/ EN</span>')}</button><a class="button button-small button-outline paper-button" href="https://arxiv.org/abs/2611.30157" target="_blank" rel="noopener noreferrer">${icon('book',15)} ${t('Read paper','阅读论文')} ${icon('external',12)}</a></div>
   </div></header>`;
 }
